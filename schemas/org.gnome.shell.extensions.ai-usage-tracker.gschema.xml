@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.ai-usage-tracker" path="/org/gnome/shell/extensions/ai-usage-tracker/">
+    <key name="enabled-providers" type="as">
+      <default><![CDATA[['claude', 'codex']]]></default>
+      <summary>Enabled providers</summary>
+      <description>Provider adapters shown in the panel popup. Each value is a collector provider id.</description>
+    </key>
+    <key name="selected-provider" type="s">
+      <default>'claude'</default>
+      <summary>Selected provider</summary>
+      <description>Provider shown first in the popup and used for the panel percentage label.</description>
+    </key>
+    <key name="panel-label" type="s">
+      <default>'icon-percent'</default>
+      <summary>Panel label</summary>
+      <description>What the top-panel button shows: icon-percent, icon, or hidden (auto-hide is separate).</description>
+    </key>
+    <key name="refresh-interval" type="i">
+      <default>900</default>
+      <summary>Refresh interval in seconds</summary>
+      <description>How often provider snapshots regenerate automatically. Range 60 to 3600.</description>
+    </key>
+    <key name="auto-hide" type="b">
+      <default>false</default>
+      <summary>Hide the panel button when there is no data</summary>
+      <description>When enabled, the indicator hides itself while no enabled provider has any usage or limits.</description>
+    </key>
+    <key name="claude-dir" type="s">
+      <default>''</default>
+      <summary>Claude directory override</summary>
+      <description>Custom Claude config directory. Empty means CLAUDE_CONFIG_DIR or ~/.claude. No secrets belong here.</description>
+    </key>
+    <key name="codex-home" type="s">
+      <default>''</default>
+      <summary>Codex home override</summary>
+      <description>Custom Codex home directory. Empty means CODEX_HOME or ~/.codex.</description>
+    </key>
+    <key name="codex-executable" type="s">
+      <default>''</default>
+      <summary>Codex executable override</summary>
+      <description>Custom codex binary path for the rate-limit probe. Empty means lookup on PATH.</description>
+    </key>
+  </schema>
+</schemalist>

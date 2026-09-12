@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AI Usage Tracker panel glyph: paired four-point sparkles on a 16x16
+  symbolic grid. Authored per the Adwaita symbolic convention (16x16
+  viewBox, #2e3436 foreground) so the Shell recolors it with the theme
+  like every other panel icon. Large star spans x 1-11 / y 2-12, small
+  star x 9.3-15.1 / y 8.9-14.7; optical center sits on the box middle. -->
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0 -0.5)">
+    <path d="M 6 2 L 7.3 5.7 L 11 7 L 7.3 8.3 L 6 12 L 4.7 8.3 L 1 7 L 4.7 5.7 Z" fill="#2e3436"/>
+    <path d="M 12.2 8.9 L 13 11 L 15.1 11.8 L 13 12.6 L 12.2 14.7 L 11.4 12.6 L 9.3 11.8 L 11.4 11 Z" fill="#2e3436"/>
+  </g>
+</svg>

@@ -1,0 +1,169 @@
+/* GNOME AI Tracker popup styling.
+ *
+ * Text inherits the shell theme so light/dark contrast comes from GNOME
+ * itself. Only the meters and status dots carry fixed colors, chosen from
+ * the GNOME palette to read on both light and dark surfaces.
+ */
+
+.ai-tracker-button {
+  spacing: 4px;
+}
+
+/* The glyph is full-color PNG (see icons/ai-tracker.png, rendered from
+ * icons/ai-tracker.svg) so it reads on both light and dark bars without
+ * symbolic recoloring and without relying on the gdk-pixbuf SVG loader
+ * (missing loader = blank SVG = percentage-only in the top bar). Belt and
+ * braces: force the 16px panel size so a custom GFileIcon can never
+ * collapse to 0px (which also leaves percentage-only). */
+.ai-tracker-button .system-status-icon {
+  icon-size: 16px;
+}
+
+.ai-tracker-pct {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+.ai-tracker-scroll {
+  padding: 6px;
+}
+
+.ai-tracker-panel {
+  spacing: 8px;
+  padding: 4px 2px;
+}
+
+.ai-tracker-header {
+  spacing: 8px;
+  padding-top: 2px;
+}
+
+.ai-tracker-title {
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.ai-tracker-plan {
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  border-radius: 10px;
+  padding: 0 8px;
+  font-size: 0.85em;
+}
+
+.ai-tracker-dot {
+  font-size: 0.8em;
+}
+
+.ai-fresh { color: #57e389; }
+.ai-stale { color: #e5a50a; }
+.ai-error { color: #ed333b; }
+.ai-loading { color: #99c1f1; }
+
+.ai-tracker-tabs {
+  spacing: 6px;
+}
+
+.ai-tracker-tab {
+  border-radius: 8px;
+  padding: 4px 12px;
+}
+
+.ai-tracker-tab:checked {
+  background-color: rgba(53, 132, 233, 0.25);
+}
+
+.ai-tracker-section {
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.ai-tracker-dim {
+  color: rgba(128, 128, 128, 1);
+  font-size: 0.9em;
+}
+
+.ai-tracker-card {
+  spacing: 4px;
+  border: 1px solid rgba(237, 51, 59, 0.5);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.ai-tracker-card-title {
+  font-weight: bold;
+}
+
+.ai-tracker-card-body {
+  font-size: 0.9em;
+}
+
+.ai-tracker-retry {
+  margin-top: 4px;
+}
+
+.ai-tracker-limit {
+  spacing: 2px;
+}
+
+.ai-tracker-limit-label {
+}
+
+.ai-tracker-track {
+  background-color: rgba(128, 128, 128, 0.35);
+  border-radius: 4px;
+  min-height: 8px;
+  margin: 2px 0 4px 0;
+}
+
+.ai-tracker-fill {
+  background-color: #3584e9;
+  border-radius: 4px;
+  min-height: 8px;
+}
+
+.ai-tracker-small {
+  min-height: 6px;
+}
+
+.ai-tracker-day {
+  spacing: 8px;
+}
+
+.ai-tracker-day-name {
+  font-size: 0.9em;
+}
+
+.ai-tracker-day-count {
+  font-size: 0.9em;
+}
+
+.ai-tracker-today {
+  font-weight: bold;
+}
+
+.ai-tracker-model {
+  spacing: 2px;
+}
+
+.ai-tracker-model-name {
+}
+
+.ai-tracker-split {
+  font-size: 0.85em;
+  color: rgba(128, 128, 128, 1);
+}
+
+.ai-tracker-stale-note {
+  font-size: 0.85em;
+  font-style: italic;
+  color: rgba(128, 128, 128, 1);
+}
+
+.ai-tracker-footer {
+  spacing: 8px;
+  margin-top: 4px;
+}
+
+.ai-tracker-action {
+  padding: 4px 12px;
+}

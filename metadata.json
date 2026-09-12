@@ -1,0 +1,9 @@
+{
+  "uuid": "ai-usage-tracker@sinasappel.github.io",
+  "name": "AI Usage Tracker",
+  "description": "Top-panel indicator for local AI coding subscription usage (Claude Code, Codex): plan, rate limits with reset countdowns, weekly token history and per-model breakdown. Read-only; uses each CLI's own login.",
+  "shell-version": ["50"],
+  "version-name": "1",
+  "settings-schema": "org.gnome.shell.extensions.ai-usage-tracker",
+  "url": "https://github.com/sinasappel/gnome-ai-tracker"
+}
