@@ -2,27 +2,7 @@
 
 Top-panel GNOME Shell extension for local AI coding subscription usage:
 plan name, rate limits with reset countdowns, seven days of token history,
-and a per-model breakdown — for Claude Code and Codex.
-
-Read-only by design: the bundled Python collector scans local transcripts
-and queries each CLI's own login. No credentials leave the credential
-store; snapshots carry plan labels and token totals only. Account limits
-and machine-local history are labeled as different measurements.
-
-## Status (validated 12 September 2026, GNOME Shell 50.4)
-
-- **Collector**: Claude history works (3,683 unique messages, 91 sessions,
-  29 active days; per-block re-emits deduplicated by message id) with live
-  OAuth limits once the CLI login is fresh; an expired login yields an
-  explicit `Sign-in expired` state instead of silent zeros. Codex shows
-  live limits (`plus` plan) plus local history (30-day session window).
-- **Extension**: loads `ACTIVE` with zero JS errors in a nested GNOME 50
-  Wayland session; popup render paths verified against fixture snapshots;
-  refresh lifecycle (independent providers, timeouts, cache, backoff,
-  clean disable) verified live.
-- **Tests**: `python3 -m unittest discover -s tests` (22 tests) and
-  `./tests/run_gjs_tests.sh` (44 checks: panel rendering, snapshot
-  contract, live refresh manager).
+and a per-model breakdown for Claude Code and Codex.
 
 ## Install (local)
 
