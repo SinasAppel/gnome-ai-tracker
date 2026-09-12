@@ -128,6 +128,15 @@ export default class AiTrackerExtension extends Extension {
         this._manager = null;
         this._panel?.destroy();
         this._panel = null;
+        // Explicitly destroy every owned actor (children would also go away
+        // with the button, but the review guidelines require explicit
+        // cleanup) and release all references.
+        this._scroll?.destroy();
+        this._scroll = null;
+        this._icon?.destroy();
+        this._icon = null;
+        this._pctLabel?.destroy();
+        this._pctLabel = null;
         this._button?.destroy();
         this._button = null;
         this._settings = null;
