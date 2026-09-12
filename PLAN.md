@@ -1,6 +1,6 @@
 # GNOME AI Tracker implementation plan
 
-Status: implemented, published-track ready 12 September 2026. Extension v2 (`ai-usage-tracker@sinasappel.github.io`) is `ACTIVE` on GNOME Shell 50.4 on host and clean Arch VM. All milestones 1–4 are done; milestone 6 (extensions.gnome.org pre-submission fixes) is done, awaiting web upload; milestone 5 (Fireworks / further providers) is open.
+Status: SUBMITTED to extensions.gnome.org 12 September 2026 (version 1, `Unreviewed`, Shell 50). New UUID `ai-usage-tracker@sinasappel.github.io`; public repo `SinasAppel/gnome-ai-tracker` (main at `81fb17d`). Milestones 1–4 and 6 (code side) are done; milestone 5 (Fireworks) is open. Awaiting reviewer feedback by email (days–weeks). NOTE: the host desktop still runs the OLD build (`ai-usage-tracker@gnome.local`); only the `arch-gnome-test` VM runs the submitted build.
 
 ## Objective and scope
 
@@ -111,22 +111,29 @@ Async subprocess orchestration, independent provider updates, atomic caching, in
 
 Add Fireworks through the same adapter contract (balances separate from subscription limits, estimates labeled). Then consider opencode/pi integration and multi-device aggregation with explicit dedup + account-identity rules.
 
-### 6. Publish on extensions.gnome.org — PRE-SUBMISSION FIXES DONE (12 Sep 2026, awaiting web upload)
+### 6. Publish on extensions.gnome.org — SUBMITTED 12 Sep 2026 (v1 `Unreviewed`, awaiting review)
 
 Goal: a public listing installable via the Extensions app / website. Review gates from the [official review guidelines](https://gjs.guide/extensions/review-guidelines/review-guidelines.html), checked against this repo:
 
 1. **Remove GTK from the Shell process (hard reject).** DONE: `extension.js` no longer imports `Gdk`/`Gtk`; icon-theme search-path setup removed, `_makeIcon()` is `Gio.FileIcon` PNG-first + stock symbolic fallback only. Verified: `rg` shows `Gtk`/`Gdk`/`Adw` only in `prefs.js` (separate process, allowed).
 2. **Add a LICENSE file.** DONE: `LICENSE` added (GPL-2.0-or-later, copyright sinasappel 2026), `THIRD_PARTY_NOTICES` kept for the MIT Omarchy-derived collector code; README Provenance updated.
 3. **Rename the UUID before first public install.** DONE: new UUID `ai-usage-tracker@sinasappel.github.io` (`metadata.json`, `scripts/package.sh`, `scripts/install-local.sh`, README). Schema id/path unchanged (`org.gnome.shell.extensions.ai-usage-tracker`), so settings survive upgrades.
-4. **Justify the Python helper in the submission notes.** READY: text prepared (see "Current next steps" / EGO submission notes) — transcript scanning + provider network I/O must stay out of the Shell process (async `Gio.Subprocess`, cache-only writes, no secrets in snapshots).
+4. **Justify the Python helper in the submission notes.** DONE (text below — reuse verbatim in the EGO reviewer thread and for any re-upload):
+   > The bundled Python helper (collector/collect.py) is necessary because transcript scanning (large JSONL history) and provider network I/O must not run synchronously in the Shell process. The extension spawns one async Gio.Subprocess per provider with an argument array, enforces a 30 s timeout, and the helper prints a single validated, display-safe JSON snapshot (512 KiB cap, schemaVersion 1, no credentials or transcript text). Snapshots are the only data crossing into the Shell; see lib/snapshot.js + tests/test_schema.py for the contract enforced on both sides.
+   > Note on shexli EGO-X-004: the single synchronous read (GLib.file_get_contents of two small JSON cache files in lib/refresh.js _loadCached) runs once per enable so the popup renders instantly from cache; all network and history scanning stays in the async Python subprocess. Actor lifecycle warnings (EGO-L-002/L-005) are addressed — disable() explicitly destroys every owned actor and releases all references.
+   > Extra context if asked: extension.js uses no Gtk/Gdk (Gio + St only); Gtk/Adw live solely in prefs.js, which runs as a separate process.
 5. **Slim the package + fix metadata.** DONE: `package.sh` ships only runtime files + `THIRD_PARTY_NOTICES` + `LICENSE` (dropped `tests/`, `scripts/`, `PLAN.md`, `README.md`); `metadata.json` `url` points at `https://github.com/sinasappel/gnome-ai-tracker`, deprecated `version` key replaced with `version-name: "1"`. Result: `gnome-ai-tracker@50.zip`, 27 files.
-6. **Submit:** re-ran both test suites + `package.sh` (host: 22/22 + all GJS smokes OK), re-verified in the clean VM (new UUID `ACTIVE`, zero JS errors; panel icon via FileIcon-only path, live Codex popup, honest Claude `Waiting for auth`, both tabs after enabling, Preferences window; VM suites 22/22 + panel/snapshot smokes OK). Shexli static analyzer on the final zip: 0 errors, 1 warning (EGO-X-004 sync cache read of two tiny local files at enable-time — by design, justified in reviewer notes); destroy warnings fixed via explicit actor cleanup in `disable()`, verified with a disable/enable cycle in the VM. Remaining manual step: upload the pack zip with screenshots/description to extensions.gnome.org, respond to review. Approval typically takes days to weeks; each later release is a new zip upload.
+6. **Submit:** DONE 12 Sep 2026 by owner via the website (`Add yours` upload form — zip-only; screenshots/description/reviewer thread live on the extension page afterwards). Submitted `gnome-ai-tracker@50.zip` (51 KiB, `version-name: "1"`, Shell 50) → listing "AI Usage Tracker", status v1 `Unreviewed`. Screenshots staged at `/tmp/opencode/ego/` (`1-panel-desktop.png`, `2-popup-tabs.png`, `3-preferences.png`) for the "Upload screenshot" button on the extension page. Pre-upload verification: both test suites + `package.sh` on host (22/22 + all GJS smokes OK); clean-VM re-verification of the submitted bytes (new UUID `ACTIVE`, zero JS errors; FileIcon-only panel icon, live Codex popup, honest Claude `Waiting for auth`, both tabs, Preferences window; VM suites 22/22 + panel/snapshot smokes OK; disable/enable cycle clean after the destroy fix). Shexli on the final zip: 0 errors, 1 warning (EGO-X-004, by design — see item 4 text).
+   Review-response loop (when the reviewer emails): fix in repo → re-run `python3 -m unittest discover -s tests` + `./tests/run_gjs_tests.sh` + `./scripts/package.sh` → re-run shexli (`/tmp/opencode/shexli-venv/bin/shexli <zip>`) → scp zip to `tester@192.168.122.202:/tmp/`, `gnome-extensions install --force` + disable/enable cycle + `journalctl --user -b | grep -ci "JS ERROR"` (expect 0) → commit + push → bump `version-name` in `metadata.json` for every re-upload (EGO requires a new version per zip) → owner re-uploads via `Add yours` (same form; system appends it as the next version).
 
 Parallel unreviewed tracks (no gate, can ship anytime): GitHub releases (zip + `install-local.sh`) and an AUR package (fits the Arch+GNOME audience).
 
 ## Current next steps
 
-1. Decide Fireworks scope (billing API access + balance-vs-estimate labeling) before adding a third adapter.
-2. Manual EGO upload (owner step): log in at extensions.gnome.org → Upload extension → submit `gnome-ai-tracker@50.zip` with the prepared description + screenshots (`/tmp/shot-vm*.png` panel/popup/prefs captures) + Python-helper justification in the reviewer notes; watch for review feedback (days–weeks).
-3. Optional hardening only if a failure is observed in daily use: backoff tuning, additional redacted fixtures.
-4. Keep README's Status/Troubleshooting in sync with any collector or Shell-version change; re-run both test suites + `scripts/package.sh` before any reinstall.
+1. Await EGO review (owner's email, days–weeks). When feedback arrives: follow the review-response loop at the end of item 6 above. If approved, the listing goes public for Shell 50.
+2. Migrate the HOST desktop to the submitted build (still on old UUID): `./scripts/package.sh && gnome-extensions install --force gnome-ai-tracker@50.zip`, log out/in (Wayland discovers new UUIDs only at startup), then `gnome-extensions enable ai-usage-tracker@sinasappel.github.io && gnome-extensions uninstall ai-usage-tracker@gnome.local`. NOTE: same-schema-id settings carry over automatically.
+3. Confirm screenshots landed on the EGO listing (`/tmp/opencode/ego/*.png` are the staged set; re-take from the VM via `virsh --connect qemu:///system screenshot` if the listing needs more).
+4. Decide Fireworks scope (billing API access + balance-vs-estimate labeling) before adding a third adapter.
+5. Parallel unreviewed tracks (no gate, can ship anytime): GitHub release (attach `gnome-ai-tracker@50.zip`) and an AUR package.
+6. Optional hardening only if a failure is observed in daily use: backoff tuning, additional redacted fixtures.
+7. Keep README's Troubleshooting in sync with any collector or Shell-version change; re-run both test suites + `scripts/package.sh` before any reinstall. (Owner trimmed README's intro/status on GitHub web 12 Sep 2026 — commit `9d6a847` — keep that lean style.)
